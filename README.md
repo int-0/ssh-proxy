@@ -30,7 +30,7 @@ The following features are *NOT* supported (but it can be added easily):
 
 The usage it's very easy (I hope):
 
-```bash
+```
 usage: ssh_proxy [-h] [--version] [--debug] [--transport-debug]
                  [-p SERVER_PORT] [-l LISTEN_ADDRESS] [-P LISTEN_PORT]
                  [-k PRIVATE_KEY] [--server-id SERVER_ID]
