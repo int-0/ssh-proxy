@@ -4,6 +4,9 @@ SSHv2 Proxy
 '''
 
 __version__ = '0.0.1'
+__author__ = 'Tobias Diaz'
+__email__ = 'tobias.deb@gmail.com'
+__license__ = 'GPLv3'
 
 import os
 import os.path
