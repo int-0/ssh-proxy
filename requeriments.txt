@@ -1,0 +1,3 @@
+paramiko==2.1.2
+# This needs libkrb5-dev
+python-gssapi==0.6.4
