@@ -31,7 +31,7 @@ The following features are *NOT* supported (but it can be added easily):
 The usage it's very easy (I hope):
 
 ```
-usage: ssh_proxy [-h] [--version] [--debug] [--transport-debug]
+usage: ssh-proxy [-h] [--version] [--debug] [--transport-debug]
                  [-p SERVER_PORT] [-l LISTEN_ADDRESS] [-P LISTEN_PORT]
                  [-k PRIVATE_KEY] [--server-id SERVER_ID]
                  [--user-bypass USER_BYPASS]
@@ -72,15 +72,43 @@ proxy:
                         authentication.
 ```
 
-Examples:
+## Examples:
 
-If you have a SSH server in you machine:
+For the basic usage you need a SSH server, for example in your own machine.
+In that case you can connect to your server throught the proxy just
+run the proxy with the following command:
+
 ```bash
-./ssh_proxy localhost
+./ssh-proxy localhost
 ```
 And then, connect the client:
 ```bash
 ssh -p 2200 localhost
 ```
 
-Enjoy.
+Server id is bypassed by default, but you can force any id. This could be
+useful to check if you are connected via proxy or direct:
+
+```bash
+./ssh-proxy --server-id "SSH-2.0-OpenSSH Proxy"
+```
+Show _debug1_ messages to check the server id:
+
+```bash
+./ssh -p 2200 -v localhost
+OpenSSH_7.4p1 Debian-10, OpenSSL 1.0.2k  26 Jan 2017
+debug1: Reading configuration data /home/tobias/.ssh/config
+debug1: Reading configuration data /etc/ssh/ssh_config
+debug1: /etc/ssh/ssh_config line 19: Applying options for *
+debug1: Connecting to localhost [::1] port 2200.
+debug1: connect to address ::1 port 2200: Connection refused
+debug1: Connecting to localhost [127.0.0.1] port 2200.
+debug1: Connection established.
+
+bla bla bla
+
+debug1: Enabling compatibility mode for protocol 2.0
+debug1: Local version string SSH-2.0-OpenSSH_7.4p1 Debian-10
+debug1: Remote protocol version 2.0, remote software version OpenSSH Proxy
+debug1: match: OpenSSH Proxy pat OpenSSH* compat 0x04000000
+```
