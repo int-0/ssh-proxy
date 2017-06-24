@@ -82,7 +82,7 @@ class SimpleSocketServer(object):
         try:
             self._sock.bind(myaddress)
             self._sock.listen(BACKLOG_SIZE)
-        except socket.error, error:
+        except socket.error as error:
             _ERR('Unable to listen in %s:%s' % myaddress)
             _ERR('Error: %s' % error)
             sys.exit(ERR_NET_ERROR)
@@ -102,7 +102,7 @@ class SimpleSocketServer(object):
             except KeyboardInterrupt:
                 _WRN('User want to quit...')
                 break
-            except Exception, error:
+            except Exception as error:
                 _ERR('Unexpected error: %s' % error)
                 traceback.print_exc()
                 bad_exit = ERR_NET_ERROR
@@ -140,7 +140,7 @@ class SSHTunnelHandler(threading.Thread):
 
         try:
             self.client.load_server_moduli()
-        except Exception, error:
+        except Exception as error:
             _WRN('Failed to load moduli(gex will be unsupported): %s' % error)
             raise
         self.client.add_server_key(server_key)
@@ -148,7 +148,7 @@ class SSHTunnelHandler(threading.Thread):
         try:
             self.client.start_server(
                 server=ClientHandler(self))
-        except paramiko.SSHException, error:
+        except paramiko.SSHException as error:
             _WRN('SSH negotiation failed: %s' % error)
             raise
         self._shutdown = threading.Event()
@@ -265,7 +265,7 @@ class ServerHandler(object):
             _ERR('Remote server has an invalid key')
         except paramiko.AuthenticationException:
             _WRN('Server rejects user/password')
-        except paramiko.SSHException, error:
+        except paramiko.SSHException as error:
             _WRN('SSH error: %s' % error)
         else:
             _ERR('Unhandled error')
@@ -288,7 +288,7 @@ class ServerHandler(object):
             _ERR('Remote server has an invalid key')
         except paramiko.AuthenticationException:
             _WRN('Server rejects user/password')
-        except paramiko.SSHException, error:
+        except paramiko.SSHException as error:
             _WRN('SSH error: %s' % error)
         else:
             _ERR('Unhandled error')
@@ -339,7 +339,7 @@ class ServerHandler(object):
             _DEB('window_change request for chanel %s completed' % (
                 channel.chanid))
             return True
-        except paramiko.SSHException, error:
+        except paramiko.SSHException as error:
             _WRN('Unable to resize window: %s' % error)
         else:
             _ERR('Unhandled error')
@@ -370,7 +370,7 @@ class ServerHandler(object):
             self.channels[channel.chanid].exec_command(cmd)
             _DEB('exec(%s) on channel %s completed' % (cmd, channel.chanid))
             return True
-        except paramiko.SSHException, error:
+        except paramiko.SSHException as error:
             _WRN('Unable to exec(%s): %s' % (cmd, error))
         else:
             _ERR('Unhandled error')
