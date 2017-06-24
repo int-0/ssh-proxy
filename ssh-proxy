@@ -30,7 +30,6 @@ DEFAULT_SERVER_KEY = '$HOME/.ssh/id_rsa'
 
 BACKLOG_SIZE = 128
 BUFFER_SIZE = 2048
-PACKET_DEBUG = False
 
 OK = 0
 ERR_BAD_CMDLINE = 1
@@ -54,6 +53,7 @@ class TunnelConfig(object):
         self._server_id = user_options.server_id or detect_server_id(
             (user_options.SERVER, user_options.server_port))
         self._user = user_options.user_bypass
+        self._packet_debug = user_options.packet_debug
 
     @property
     def server_id(self):
@@ -64,6 +64,11 @@ class TunnelConfig(object):
     def user(self):
         '''Return user or None for not user-bypass'''
         return self._user
+
+    @property
+    def packet_debug(self):
+        '''Return is packet trace is enabled'''
+        return self._packet_debug
 
 
 class SimpleSocketServer(object):
@@ -134,7 +139,7 @@ class SSHTunnelHandler(threading.Thread):
 
         self.server = ServerHandler(server_address)
         self.client = paramiko.Transport(connection, gss_kex=True)
-        if PACKET_DEBUG:
+        if self._tunnel_config.packet_debug:
             self.client.set_hexdump(True)
         self.client.set_gss_host(socket.getfqdn(""))
 
@@ -173,7 +178,7 @@ class SSHTunnelHandler(threading.Thread):
         '''Forward a publickey auth request'''
         username = self.config.user or username
         keyfile = tempfile.NamedTemporaryFile(delete=False)
-        keyfile.write(str(key))
+        keyfile.write(bytes(str(key), 'utf-8'))
         keyfile.close()
         _DEB('Key recived, saved to: %s' % keyfile.name)
         if self.server.auth_publickey(username, keyfile.name):
@@ -560,12 +565,9 @@ class ChannelForward(threading.Thread):
 
 def main():
     '''Parse command line, make the proxy and wait for end'''
-    global PACKET_DEBUG
-
     user_options = parse_commandline()
 
-    PACKET_DEBUG = user_options.packet_debug
-    if PACKET_DEBUG:
+    if user_options.debug:
         logging.getLogger("paramiko").setLevel(logging.DEBUG)
     logging.basicConfig(
         level=logging.DEBUG if user_options.debug else logging.INFO)
@@ -592,7 +594,7 @@ def parse_commandline():
                         help='Be verbose (PRIVATE CONTENT CAN BE SHOWED!)',
                         dest='debug')
     parser.add_argument('--transport-debug',
-                        action='store_true', default=PACKET_DEBUG,
+                        action='store_true', default=False,
                         help='Show traffic (PRIVATE CONTENT WILL BE SHOWED!)',
                         dest='packet_debug')
 
