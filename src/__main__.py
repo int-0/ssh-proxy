@@ -61,7 +61,7 @@ class TunnelConfig(object):
         return self._packet_debug
 
 
-def main():
+def main(args=None):
     '''Parse command line, make the proxy and wait for end'''
     user_options = parse_commandline()
 
@@ -83,6 +83,7 @@ def main():
                                  tunnel_config).serve_forever()
     except sshv2.ProxyError as error:
         sys.exit(ERR_SERVER_ERROR)
+    sys.exit(OK)
 
 
 def parse_commandline():
@@ -157,4 +158,3 @@ def load_key(key_file):
 
 if __name__ == '__main__':
     main()
-    sys.exit(OK)
