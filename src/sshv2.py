@@ -92,8 +92,12 @@ class TunnelHandler(threading.Thread):
         '''Forward a publickey auth request'''
         username = self.config.user or username
         keyfile = tempfile.NamedTemporaryFile(delete=False)
-        #keyfile.write(bytes(str(key), 'utf-8'))
-        keyfile.write(bytes(str(key)))
+        try:
+            # Python 2
+            keyfile.write(bytes(str(key)))
+        except TypeError:
+            # Python 3
+            keyfile.write(bytes(str(key), 'utf-8'))
         keyfile.close()
         _DEB('Key recived, saved to: %s' % keyfile.name)
         if self.server.auth_publickey(username, keyfile.name):
@@ -424,7 +428,10 @@ def forward(ep1, ep2):
     stdout = stderr = status = None
     if ep1.exit_status_ready():
         status = ep1.recv_exit_status()
-        ep2.send_exit_status(status)
+        if status >= 0:
+            ep2.send_exit_status(status)
+        else:
+            _DEB('Ignoring wrong status code: %s' % status)
     if ep1.recv_ready():
         stdout = ep1.recv(BUFFER_SIZE)
         ep2.send(stdout)

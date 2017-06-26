@@ -9,8 +9,8 @@ __email__ = 'tobias.deb@gmail.com'
 __license__ = 'GPLv3'
 
 import os
-import os.path
 import sys
+import os.path
 import logging
 import argparse
 

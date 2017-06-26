@@ -31,7 +31,9 @@ setup(
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Networking',
         'License :: OSI Approved :: GPLv3 License',
-        'Programming Language :: Python :: 2.7'
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.5'
     ],
     keywords='networking development',
     packages=['sshv2'],
@@ -43,4 +45,3 @@ setup(
         ]
     }
 )
-    

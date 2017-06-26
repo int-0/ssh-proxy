@@ -10,4 +10,9 @@ __license__ = 'GPLv3'
 
 __all__ = ['sshv2', '__main__']
 
-from sshv2 import *
+try:
+    # Python 3
+    from sshv2.sshv2 import *
+except ImportError:
+    # Python 2
+    from sshv2 import *
