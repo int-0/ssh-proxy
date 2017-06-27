@@ -9,19 +9,11 @@ __email__ = 'tobias.deb@gmail.com'
 __license__ = 'GPLv3'
 
 from setuptools import setup
-from codecs import open
-from os import path
-
-cwd = path.abspath(path.dirname(__file__))
-
-with open(path.join(cwd, 'README.md'), encoding='utf-8') as f:
-    long_description = f.read()
 
 setup(
     name='SSHv2 Proxy',
     version=__version__,
     description='Simple SSHv2 server proxy',
-    long_description=long_description,
     url='https://github.com/int-0/ssh-proxy',
     author='Tobias Diaz',
     author_email='tobias.deb@gmail.com',
