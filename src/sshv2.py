@@ -16,7 +16,6 @@ import traceback
 
 import paramiko
 import paramiko.server
-from paramiko import SSHException
 
 # Logging
 _DEB = logging.debug
@@ -137,7 +136,7 @@ class TunnelHandler(threading.Thread):
         server_response = self.server.channel_exec(channel, cmd)
         if server_response:
             ChannelForward(self.server.channels[channel.chanid], channel)
-        return  server_response
+        return server_response
 
     def channel_x11_request(self, channel, single_connection,
                             auth_protocol, auth_cookie, screen_number):
